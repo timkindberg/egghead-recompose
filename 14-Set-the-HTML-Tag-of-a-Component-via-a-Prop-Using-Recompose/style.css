@@ -1,0 +1,17 @@
+.App {
+  margin-top: 50px;
+  text-align: center;
+  font-size: 18px;
+  font-family: Rockwell, “Courier Bold”, Courier, Georgia, Times, “Times New Roman”, serif;
+}
+
+button {
+  -webkit-style: none;
+  border: 0;
+  padding: 10px 15px;
+  font-size: inherit;
+  border-radius: 2px;
+  cursor: pointer;
+  background-color: lightblue;
+  color: #333;
+}
