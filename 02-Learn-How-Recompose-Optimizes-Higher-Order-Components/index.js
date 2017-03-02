@@ -19,8 +19,10 @@ var _React = React,
 
 var overrideProps = function overrideProps(_overrideProps) {
   return function (BaseComponent) {
+    var factory = createEagerFactory(BaseComponent);
+
     return function (props) {
-      return React.createElement(BaseComponent, _extends({}, props, _overrideProps));
+      return factory(_extends({}, props, _overrideProps), props.children);
     };
   };
 };
@@ -41,7 +43,8 @@ var App = function App() {
   return React.createElement(
     'div',
     null,
-    React.createElement(User, { name: 'Joe' })
+    React.createElement(User, { name: 'Joe' }),
+    React.createElement(User2, { name: 'Steve' })
   );
 };
 
@@ -49,9 +52,23 @@ ReactDOM.render(React.createElement(App, null), document.getElementById('main'))
 
 ///// HOC Optimizations /////
 
-function createEagerFactory(Component) {}
+function createEagerFactory(Component) {
+  return function (props, children) {
+    if (isReferentiallyTransparentFunctionComponent(Component)) {
+      return children ? Component(_extends({}, props, { children: children })) : Component(props);
+    }
 
-function isReferentiallyTransparentFunctionComponent(Component) {}
+    return children ? React.createElement(
+      Component,
+      props,
+      children
+    ) : React.createElement(Component, props);
+  };
+}
+
+function isReferentiallyTransparentFunctionComponent(Component) {
+  return Boolean(typeof Component === 'function' && !isClassComponent(Component) && !Component.defaultProps && !Component.contextTypes && (window.process.env.NODE_ENV === 'production' || !Component.propTypes));
+}
 
 function isClassComponent(Component) {
   return Boolean(Component && Component.prototype && _typeof(Component.prototype.isReactComponent) === 'object');
