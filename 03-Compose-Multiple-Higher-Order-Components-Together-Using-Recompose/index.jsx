@@ -19,9 +19,9 @@ const enhance = compose(
 );
 
 const User = enhance(({ name, status, dispatch }) =>
-  <div
-    className="User"
-    onClick={ () => dispatch({ type: 'USER_SELECTED' }) }>
+  <div className="User" onClick={
+      () => dispatch({ type: "USER_SELECTED" })
+    }>
     { name }: { status }
   </div>
 );
@@ -32,6 +32,17 @@ ReactDOM.render(
   <User name="Tim" status="active" />,
   document.getElementById('main')
 );
+
+
+
+
+
+
+
+
+
+
+// fake implementation of redux
 
 function Redux() {
   return {
