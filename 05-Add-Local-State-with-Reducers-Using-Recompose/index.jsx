@@ -1,35 +1,33 @@
 /*
 TITLE:
-Add Local State Using Reducers using Recompose
+Add Local State to a Functional Stateless Component using Recompose
 
 DESCRIPTION:
-Learn how to use the 'withReducer' higher-order component
-using the alternative reducer form. If you like using
-reducers in redux, you’ll be able to reuse that same
-technique but for local state.
+Learn how to use the 'withState' and 'withHandlers' higher order
+components to easily add local state to your functional stateless
+components. No need for classes!
 */
-
 const { Component } = React;
-const { compose, withReducer } = Recompose;
+const { compose, withReducer, withHandlers } = Recompose;
 
-const toggleReducer = (state, action) => {
-  switch (action.type) {
-    case 'SHOW':
-      return true;
-    case 'HIDE':
-      return false;
-    case 'TOGGLE':
-      return !state;
-    default:
-      return state;
-  }
-}
-
-const withToggling = withReducer(
-  'toggledOn',
-  'dispatch',
-  toggleReducer,
-  false
+const withToggle = compose(
+  withReducer('toggledOn', 'dispatch', (state, action) => {
+    switch(action.type) {
+      case 'SHOW':
+        return true;
+      case 'HIDE':
+        return false;
+      case 'TOGGLE':
+        return !state;
+      default:
+        return state;
+    }
+  }, false),
+  withHandlers({
+    show: ({ dispatch }) => (e) => dispatch({ type: 'SHOW' }),
+    hide: ({ dispatch }) => (e) => dispatch({ type: 'HIDE' }),
+    toggle: ({ dispatch }) => (e) => dispatch({ type: 'TOGGLE' })
+  })
 );
 
 const StatusList = () =>
@@ -39,26 +37,21 @@ const StatusList = () =>
     <div>active</div>
   </div>;
 
-const Status = withToggling(({ status, dispatch, toggledOn }) =>
-  <span onClick={ () => dispatch({ type: 'TOGGLE' }) }>
+const Status = withToggle(({ status, toggledOn, toggle }) =>
+  <span onClick={ toggle }>
     { status }
     { toggledOn && <StatusList /> }
   </span>
 );
 
-const Tooltip = withToggling(({ text, children, dispatch, toggledOn }) =>
+const Tooltip = withToggle(({ text, children, toggledOn, show, hide }) =>
   <span>
     { toggledOn && <div className="Tooltip">{ text }</div> }
-    <span
-      onMouseEnter={ () => dispatch({ type: 'SHOW' }) }
-      onMouseLeave={ () => dispatch({ type: 'HIDE' }) }
-    >
-      { children }
-    </span>
+    <span onMouseEnter={ show } onMouseLeave={ hide }>{ children }</span>
   </span>
 );
 
-const User = ({ name, status, dispatch }) =>
+const User = ({ name, status }) =>
   <div className="User">
     <Tooltip text="Cool Dude!">{ name }</Tooltip>—
     <Status status={ status } />
