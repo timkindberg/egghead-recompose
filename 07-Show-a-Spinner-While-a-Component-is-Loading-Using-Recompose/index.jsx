@@ -13,7 +13,7 @@ const { compose, lifecycle, branch, renderComponent } = Recompose;
 
 const withUserData = lifecycle({
   getInitialState() {
-    return { loading: true }
+    return { loading: true };
   },
   componentDidMount() {
     fetchData().then((data) =>
@@ -21,11 +21,12 @@ const withUserData = lifecycle({
   }
 });
 
-const isLoading = ({ loading }) => loading;
 const Spinner = () =>
   <div className="Spinner">
     <div className="loader">Loading...</div>
   </div>;
+
+const isLoading = ({ loading }) => loading;
 
 const withSpinnerWhileLoading = branch(
   isLoading,
