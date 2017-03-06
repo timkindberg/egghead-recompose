@@ -14,12 +14,14 @@ const configPromise = fetchConfiguration();
 
 const withConfig = lifecycle({
   getInitialState() {
-    return { config: {} }
+    return { config: {} };
   },
   componentDidMount() {
-    configPromise.then((config) =>
+    configPromise.then(config =>
       this.setState({ config }));
-  }
+  },
+  shouldComponentUpdate,
+  componentWillMount,
 });
 
 const User = withConfig(({ name, status, config }) =>
@@ -40,9 +42,11 @@ ReactDOM.render(
   document.getElementById('main')
 );
 
+// Mock Configuration
+
 const config = {
-  showStatus: true,
-  canDeleteUsers: true
+  showStatus: false,
+  canDeleteUsers: false
 }
 
 function fetchConfiguration() {
