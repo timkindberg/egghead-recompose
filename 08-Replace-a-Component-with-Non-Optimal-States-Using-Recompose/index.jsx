@@ -20,26 +20,14 @@ const User = ({ name, status }) =>
 const withUserData = lifecycle({
   componentDidMount() {
     fetchData().then(
-      (users) => {
-        console.log('success', users);
-        this.setState({ users });
-      },
-      (error) => {
-        console.log('error', error);
-        this.setState({ error });
-      }
+      (users) => this.setState({ users }),
+      (error) => this.setState({ error })
     );
   }
 });
 
-const nonOptimalStates = (states) =>
-  compose(...states.map(state =>
-    branch(state.when, renderComponent(state.render))
-  ));
-
 const UNAUTHENTICATED = 401;
 const UNAUTHORIZED = 403;
-
 const errorMsgs = {
   [UNAUTHENTICATED]: 'Not Authenticated!',
   [UNAUTHORIZED]: 'Not Authorized!',
@@ -48,11 +36,16 @@ const errorMsgs = {
 const AuthError = ({ error }) =>
   error.statusCode &&
     <div className="Error">{ errorMsgs[error.statusCode] }</div>;
+
 const NoUsersMessage = () =>
   <div>There are no users to display</div>;
 
-const hasErrorCode = (props) => props.error && props.error.statusCode;
-const hasNoUsers = (props) => props.users && props.users.length === 0;
+const hasErrorCode = ({ error }) => error && error.statusCode;
+const hasNoUsers = ({ users }) => users && users.length === 0;
+
+const nonOptimalStates = (states) =>
+  compose(...states.map(state =>
+    branch(state.when, renderComponent(state.render))));
 
 const enhance = compose(
   withUserData,
@@ -62,7 +55,7 @@ const enhance = compose(
   ])
 );
 
-const UserList = enhance(({ users }) =>
+const UserList = enhance(({ users, error }) =>
   <div className="UserList">
     { users && users.map((user) => <User {...user} />) }
   </div>
@@ -78,6 +71,7 @@ ReactDOM.render(
   document.getElementById('main')
 );
 
+// Mock Service
 const noUsers = [];
 const users = [
   { name: "Tim", status: "active" },
@@ -85,14 +79,13 @@ const users = [
   { name: "Joe", status: "inactive" },
   { name: "Jim", status: "pending" },
 ];
-
 function fetchData() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject({ statusCode: UNAUTHENTICATED });
-//       reject({ statusCode: UNAUTHORIZED })
-//       resolve(noUsers);
-//       resolve(users);
+      // reject({ statusCode: UNAUTHENTICATED });
+      // reject({ statusCode: UNAUTHORIZED })
+      resolve(noUsers);
+      // resolve(users);
     }, 100);
   });
 }
