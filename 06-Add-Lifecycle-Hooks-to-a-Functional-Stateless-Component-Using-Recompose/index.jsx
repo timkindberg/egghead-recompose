@@ -19,9 +19,7 @@ const withConfig = lifecycle({
   componentDidMount() {
     configPromise.then(config =>
       this.setState({ config }));
-  },
-  shouldComponentUpdate,
-  componentWillMount,
+  }
 });
 
 const User = withConfig(({ name, status, config }) =>
@@ -45,8 +43,8 @@ ReactDOM.render(
 // Mock Configuration
 
 const config = {
-  showStatus: false,
-  canDeleteUsers: false
+  showStatus: true,
+  canDeleteUsers: true
 }
 
 function fetchConfiguration() {
