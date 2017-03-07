@@ -7,22 +7,37 @@ Learn how to use the ‘flattenProp’ higher order component to take a
 single object prop and spread each of its fields out as a prop.
 */
 const { Component } = React;
-const { flattenProp } = Recompose;
+const { compose, flattenProp } = Recompose;
+const { connect } = ReactRedux();
 
-const enhance = flattenProp('user');
+const mapStateToProps = (state) => ({ user: state.user });
 
-const User = enhance(({ name, status }) =>
-  <div className="User">{ name }—{ status }</div>
+const enhance = compose(
+  connect(mapStateToProps),
+  flattenProp('user')
 );
 
-const user = { name: 'Tim', status: 'active' };
+const User = enhance(({ name, status }) =>
+  <div className="User"> { name } - { status } </div>
+);
 
 const App = () =>
   <div className="App">
-    <User user={ user } />
+    <User />
   </div>;
 
 ReactDOM.render(
   <App />,
   document.getElementById('main')
 );
+
+// Mock Implemenation of ReactRedux connect
+function ReactRedux() {
+  const state = {
+    user: { name: 'Tim', status: 'active' }
+  };
+
+  return {
+    connect: (map) => Recompose.withProps(map(state))
+  }
+}
