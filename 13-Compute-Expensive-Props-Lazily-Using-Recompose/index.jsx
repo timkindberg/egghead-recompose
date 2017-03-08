@@ -9,49 +9,48 @@ Simply specify which props are “expensive” and provide a factory function
 for those props.
 */
 const { Component } = React;
-const { withPropsOnChange, withState,
-        withHandlers, compose } = Recompose;
+const { withPropsOnChange, withState, withHandlers, compose } = Recompose;
 
-let count = 0;
-const lazy = withPropsOnChange(
+const lazyResult = withPropsOnChange(
   ['depth'],
-  (props) => ({
-    result: fibonacci(props.depth),
-    count: ++count
+  ({ depth }) => ({
+    result: fibonacci(depth)
   })
 );
 
-const Fibonacci = lazy(({ result, color, size, count }) =>
+const Fibonacci = lazyResult(({ result, color, size }) =>
   <div style={{ color, fontSize: size }}>
-    Result: { result }
-    <br/>
-    Compute count: { count }
+    Fibonacci Result:<br/>{ result }
   </div>
 );
 
-const enhance = compose(
-  withState('depth', 'setDepth', 20),
+const withAppState = compose(
+  withState('depth', 'setDepth', 1400),
   withState('color', 'setColor', 'red'),
-  withState('size', 'setSize', 30)
+  withState('size', 'setSize', 14)
 );
 
-const App = enhance(({ depth, color, size, setDepth, setColor, setSize }) =>
+const App = withAppState(({ depth, color, size, setDepth, setColor, setSize }) =>
   <div className="App">
-    <div>Depth:
+    <Fibonacci { ...{ depth, color, size} } />
+    <br/>
+    <div>
+      <span>Depth: { depth } </span>
       <button onClick={ () => setDepth(x => x + 1) }>+</button>
       <button onClick={ () => setDepth(x => x - 1) }>-</button>
     </div>
-    <div>Size:
+    <div>
+      <span>Size: { size } </span>
       <button onClick={ () => setSize(x => x + 1) }>+</button>
       <button onClick={ () => setSize(x => x - 1) }>-</button>
     </div>
-    <div>Color:
+    <div>
+      <span>Color: </span>
       <button onClick={ () => setColor('blue') }>blue</button>
       <button onClick={ () => setColor('green') }>green</button>
       <button onClick={ () => setColor('red') }>red</button>
     </div>
     <br/>
-    <Fibonacci { ...{ depth, color, size} } />
   </div>
 );
 
@@ -60,7 +59,13 @@ ReactDOM.render(
   document.getElementById('main')
 );
 
+let count = 1;
+
 function fibonacci(num, memo) {
+  if (!memo) {
+    document.getElementById('log').textContent = `Computed: ${++count || 1}`;
+  }
+
   memo = memo || {};
 
   if (memo[num]) return memo[num];
