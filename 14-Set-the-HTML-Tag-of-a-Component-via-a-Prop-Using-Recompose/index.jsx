@@ -11,21 +11,20 @@ swapping an <a> for a <button> or even a react router <Link>
 depending on circumstance.
 */
 const { Component } = React;
-const { withPropsOnChange, compose, componentFromProp,
-        mapProps, withProps } = Recompose;
+const { compose, componentFromProp, withProps } = Recompose;
 
 const Link = compose(
   withProps(({ type='a', to='#' }) =>
     type === 'a'
       ? { type, href: to }
-      : { type, onClick(e) { window.location = to } })
+      : { type, onClick(e) { window.location=to }})
 )(componentFromProp('type'));
 
 const App = () =>
   <div className="App">
+    <a href="#/page1">Anchor Link</a>
+    <button onClick={ window.location="#/page2" }>Button Link</button>
     <Link to="#/page1">Anchor Link</Link>
-    <br/>
-    <br/>
     <Link type="button" to="#/page2">Button Link</Link>
   </div>
 

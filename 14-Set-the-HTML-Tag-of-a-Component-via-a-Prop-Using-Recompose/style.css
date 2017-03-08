@@ -14,4 +14,5 @@ button {
   cursor: pointer;
   background-color: lightblue;
   color: #333;
+  margin-top: 20px;
 }
