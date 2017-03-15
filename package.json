@@ -20,6 +20,8 @@
     "start13": "FOLDER=`ls -a | grep 13` npm start",
     "start14": "FOLDER=`ls -a | grep 14` npm start",
     "start15": "FOLDER=`ls -a | grep 15` npm start",
+    "start16": "FOLDER=`ls -a | grep 16` npm start",
+    "start17": "FOLDER=`ls -a | grep 17` npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tim Kindberg",

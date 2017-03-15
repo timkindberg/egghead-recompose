@@ -1,0 +1,21 @@
+.App {
+  font-size: 9px;
+  font-family: Rockwell, “Courier Bold”, Courier, Georgia, Times, “Times New Roman”, serif;
+}
+
+.Cell {
+  display: inline-block;
+  border: 2px solid;
+  box-sizing: border-box;
+  height: 40px
+}
+
+.Cell textarea {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  resize: none;
+  font-size: 10px;
+}
