@@ -30,13 +30,13 @@
     "presets": [
       "latest",
       "react",
-      "stage-3"
+      "stage-2"
     ]
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-preset-latest": "^6.22.0",
     "babel-preset-react": "^6.23.0",
-    "babel-preset-stage-3": "^6.22.0"
+    "babel-preset-stage-2": "^6.22.0"
   }
 }
