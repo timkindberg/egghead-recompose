@@ -13,9 +13,7 @@ const { compose, lifecycle } = Recompose;
 const configPromise = fetchConfiguration();
 
 const withConfig = lifecycle({
-  getInitialState() {
-    return { config: {} };
-  },
+  state: { config: {} },
   componentDidMount() {
     configPromise.then(config =>
       this.setState({ config }));

@@ -12,9 +12,7 @@ const { Component } = React;
 const { compose, lifecycle, branch, renderComponent } = Recompose;
 
 const withUserData = lifecycle({
-  getInitialState() {
-    return { loading: true };
-  },
+  state: { loading: true },
   componentDidMount() {
     fetchData().then((data) =>
       this.setState({ loading: false, ...data }));
